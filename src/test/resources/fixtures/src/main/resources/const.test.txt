@@ -1,0 +1,19 @@
+/*? if forge {*/
+/*forgeline
+*//*?}*/
+
+/*? if fabric {*/
+/*fabricline
+*//*?}*/
+
+/*? if neoforge {*/
+/*neoforgeline
+*//*?}*/
+
+/*? if forgeLike {*/
+/*forgelikeline
+*//*?}*/
+
+/*? if fabricLike {*/
+/*fabriclikeline
+*//*?}*/

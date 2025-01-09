@@ -31,12 +31,17 @@ dependencies {
     implementation(plugin("me.modmuss50.mod-publish-plugin", "0.+"))
 
     testImplementation(gradleTestKit())
+    testImplementation("org.mockito:mockito-core:5.4.0")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:5.4.0")
     testImplementation("org.junit.jupiter:junit-jupiter:5.+")
+    testImplementation("net.bytebuddy:byte-buddy:LATEST")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
 }
 
-tasks.named<Test>("test") {
+tasks.withType<Test> {
     useJUnitPlatform()
+    jvmArgs("-XX:+EnableDynamicAgentLoading")
 }
 
 java {
@@ -45,10 +50,10 @@ java {
 
 gradlePlugin {
     plugins {
-        create("gg.meza.stonecuttermod") {
-            id = "gg.meza.stonecuttermod"
-            displayName = "Meza's Stonecutter Mod defaults"
-            implementationClass = "gg.meza.stonecuttermod.ModPlugin"
+        create("gg.meza.stonecraft") {
+            id = "gg.meza.stonecraft"
+            displayName = "Stonecraft"
+            implementationClass = "gg.meza.stonecraft.ModPlugin"
             version = "0.002"
         }
     }
