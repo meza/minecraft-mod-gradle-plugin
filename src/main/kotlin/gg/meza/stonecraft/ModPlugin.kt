@@ -38,7 +38,7 @@ class ModPlugin : Plugin<ExtensionAware> {
 
         val stonecutter = project.extensions.getByType<StonecutterBuild>()
         val base = project.extensions.getByType(BasePluginExtension::class);
-        val modSettings = project.extensions.create("modSettings", ModSettingsExtension::class.java)
+        val modSettings = project.extensions.create("modSettings", ModSettingsExtension::class.java, project, project.mod.loader)
 
         val minecraftVersion = stonecutter.current.version
 
@@ -47,14 +47,15 @@ class ModPlugin : Plugin<ExtensionAware> {
 
         configureDependencies(project, minecraftVersion)
         configureStonecutterConstants(project, stonecutter)
-        patchAroundArchitecturyQuirks(project)
         configureProcessResources(project, minecraftVersion, modSettings)
         configureLoom(project, stonecutter, modSettings)
+        patchAroundArchitecturyQuirks(project, stonecutter)
         configurePublishing(project, minecraftVersion)
         configureTasks(project, stonecutter, modSettings)
+        configureJava(project, stonecutter, modSettings)
 
         project.afterEvaluate {
-            configureJava(project, stonecutter, modSettings)
+
         }
     }
 }

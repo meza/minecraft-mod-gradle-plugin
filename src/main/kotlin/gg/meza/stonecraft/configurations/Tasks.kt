@@ -1,6 +1,7 @@
 package gg.meza.stonecraft.configurations
 
 import dev.kikugie.stonecutter.build.StonecutterBuild
+import gg.meza.stonecraft.canBeLaunchedByArchitectury
 import gg.meza.stonecraft.extension.ModSettingsExtension
 import gg.meza.stonecraft.mod
 import gg.meza.stonecraft.tasks.ConfigureMinecraftClient
@@ -9,6 +10,7 @@ import org.gradle.api.Project
 import org.gradle.api.tasks.Copy
 import org.gradle.kotlin.dsl.named
 import org.gradle.kotlin.dsl.register
+import kotlin.math.min
 
 fun configureTasks(project: Project, stonecutter: StonecutterBuild, modSettings: ModSettingsExtension) {
     val currentModGroup = "mod"
@@ -42,12 +44,9 @@ fun configureTasks(project: Project, stonecutter: StonecutterBuild, modSettings:
             group = currentModGroup
             dependsOn(project.tasks.named("runGameTestClient"))
         }
-
-        if (!(project.mod.isForge && minecraftVersion.equals("1.21.4"))) {
-            project.rootProject.tasks.register("testActiveServer") {
-                group = currentModGroup
-                dependsOn(project.tasks.named("runGameTestServer"))
-            }
+        project.rootProject.tasks.register("testActiveServer") {
+            group = currentModGroup
+            dependsOn(project.tasks.named("runGameTestServer"))
         }
     }
 

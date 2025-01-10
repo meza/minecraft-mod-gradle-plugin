@@ -20,11 +20,15 @@ fun configureJava(project: Project, stonecutter: StonecutterBuild, modSettingsEx
         sourceCompatibility = javaVersion
         targetCompatibility = javaVersion
         toolchain.languageVersion.set(JavaLanguageVersion.of(javaVersion.toString()))
+    }
 
-        // Add the generated resources directory to the resources source set for ForgeLike mods
-        // This is to allow them to read the generated resources
-        if (project.mod.isForgeLike) {
-            sourceSets.named("main").get().resources.srcDir(generatedResources.get())
+    project.afterEvaluate {
+        project.project.configure<JavaPluginExtension> {
+            // Add the generated resources directory to the resources source set for ForgeLike mods
+            // This is to allow them to read the generated resources
+            if (project.mod.isForgeLike) {
+                sourceSets.named("main").get().resources.srcDir(generatedResources.get())
+            }
         }
     }
 }

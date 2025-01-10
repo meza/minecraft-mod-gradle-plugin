@@ -123,7 +123,21 @@ tasks.register("publishingSettings") {
     }
 
     @Test
-    fun `appropriate warnings are shown when the platform environment variables are not defined`() {
+    fun `warnings are not shown in dry-run when the platform environment variables are not defined`() {
+        gradleTest.setStonecutterVersion("1.21.4", "fabric")
+
+        val br = gradleTest.run("publishingSettings")
+
+        assertFalse(br.output.contains("Essential Modrinth variables not found, skipping Modrinth publishing"))
+        assertFalse(br.output.contains("If you want to use Modrinth, please set the MODRINTH_TOKEN and MODRINTH_ID environment variables"))
+        assertFalse(br.output.contains("Essential CurseForge variables not found, skipping CurseForge publishing"))
+        assertFalse(br.output.contains("If you want to use CurseForge, please set the CURSEFORGE_SLUG, CURSEFORGE_ID, and CURSEFORGE_TOKEN environment variables"))
+
+    }
+
+    @SetEnvironmentVariable(key = "DO_PUBLISH", value = "anything-but-true")
+    @Test
+    fun `appropriate warnings are shown when the platform environment variables are not defined in non-dry run mode`() {
         gradleTest.setStonecutterVersion("1.21.4", "fabric")
 
         val br = gradleTest.run("publishingSettings")

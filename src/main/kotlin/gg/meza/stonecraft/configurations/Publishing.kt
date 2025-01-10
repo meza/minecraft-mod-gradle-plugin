@@ -27,6 +27,7 @@ fun configurePublishing(project: Project, minecraftVersion: String) {
         type.set(if (isBeta) BETA else STABLE)
         modLoaders.add(mod.loader)
         displayName.set("${mod.version} for ${mod.loader.upperCaseFirst()} $minecraftVersion")
+        dryRun.set(project.providers.environmentVariable("DO_PUBLISH").getOrElse("true").toBoolean())
 
         publishing.platforms.forEach { platform ->
             println("LOOKIE HERE  -> Platform: $platform")
@@ -40,8 +41,10 @@ fun configurePublishing(project: Project, minecraftVersion: String) {
                 announcementTitle.set("Download ${mod.version}+${mod.loader}-${minecraftVersion} from Modrinth")
             }
         } else {
-            project.rootProject.logger.lifecycle("Essential Modrinth variables not found, skipping Modrinth publishing")
-            project.rootProject.logger.lifecycle("If you want to use Modrinth, please set the MODRINTH_TOKEN and MODRINTH_ID environment variables")
+            if (!dryRun.get()) {
+                project.rootProject.logger.lifecycle("Essential Modrinth variables not found, skipping Modrinth publishing")
+                project.rootProject.logger.lifecycle("If you want to use Modrinth, please set the MODRINTH_TOKEN and MODRINTH_ID environment variables")
+            }
         }
 
         if (curseforgeVariables.all { project.providers.environmentVariable(it).isPresent }) {
@@ -53,10 +56,10 @@ fun configurePublishing(project: Project, minecraftVersion: String) {
                 announcementTitle.set("Download ${mod.version}+${mod.loader}-${minecraftVersion} from CurseForge")
             }
         } else {
-            project.rootProject.logger.lifecycle("Essential CurseForge variables not found, skipping CurseForge publishing")
-            project.rootProject.logger.lifecycle("If you want to use CurseForge, please set the CURSEFORGE_SLUG, CURSEFORGE_ID, and CURSEFORGE_TOKEN environment variables")
+            if (!dryRun.get()) {
+                project.rootProject.logger.lifecycle("Essential CurseForge variables not found, skipping CurseForge publishing")
+                project.rootProject.logger.lifecycle("If you want to use CurseForge, please set the CURSEFORGE_SLUG, CURSEFORGE_ID, and CURSEFORGE_TOKEN environment variables")
+            }
         }
-
-        dryRun.set(project.providers.environmentVariable("DO_PUBLISH").getOrElse("true").toBoolean())
     }
 }

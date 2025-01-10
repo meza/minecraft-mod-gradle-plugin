@@ -1,13 +1,15 @@
 package gg.meza.stonecraft.configurations
 
+import dev.kikugie.stonecutter.build.StonecutterBuild
+import gg.meza.stonecraft.canBeLaunchedByArchitectury
 import gg.meza.stonecraft.mod
 import org.gradle.api.Project
 import org.gradle.api.tasks.JavaExec
 import org.gradle.kotlin.dsl.named
 
-fun patchAroundArchitecturyQuirks(project: Project) {
+fun patchAroundArchitecturyQuirks(project: Project, stonecutter: StonecutterBuild) {
     addForgeJOPTDependency(project)
-    removeUnnecessaryLWJGLDependencies(project)
+    removeUnnecessaryLWJGLDependencies(project, stonecutter)
 }
 
 /**
@@ -16,13 +18,13 @@ fun patchAroundArchitecturyQuirks(project: Project) {
  *
  * @see https://github.com/architectury/architectury-loom/issues/191#issuecomment-2030567486
  */
-private fun removeUnnecessaryLWJGLDependencies(project: Project) {
+private fun removeUnnecessaryLWJGLDependencies(project: Project, stonecutter: StonecutterBuild) {
     project.afterEvaluate {
         tasks.named<JavaExec>("runServer") {
             classpath = classpath.filter { !it.toString().contains("\\org.lwjgl\\") }
         }
 
-        if (tasks.findByName("runGameTestServer") != null) {
+        if(canBeLaunchedByArchitectury(project.mod, stonecutter)) {
             tasks.named<JavaExec>("runGameTestServer") {
                 classpath = classpath.filter { !it.toString().contains("\\org.lwjgl\\") }
             }

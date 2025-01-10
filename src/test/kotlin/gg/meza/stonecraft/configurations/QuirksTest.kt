@@ -16,9 +16,11 @@ class QuirksTest : IntegrationTest {
         gradleTest = gradleTest().buildScript("""
 tasks.register("printClasspathServer") {
     tasks.named<JavaExec>("runServer").get().classpath.forEach(${':'}${':'}println)
-//    if (tasks.findByName("printClasspathTestServer") != null) {
-        tasks.named<JavaExec>("runGameTestServer").get().classpath.forEach(${':'}${':'}println)
-//    }
+    tasks.named<JavaExec>("runGameTestServer").get().classpath.forEach(${':'}${':'}println)
+}
+tasks.register("printClasspathServer1214Forge") {
+    tasks.named<JavaExec>("runServer").get().classpath.forEach(${':'}${':'}println)
+    dependsOn("runGameTestServer")
 }
 tasks.register("getForcedModules") {
     configurations.forEach {
@@ -34,6 +36,15 @@ tasks.register("getForcedModules") {
         val br = gradleTest.run("printClasspathServer")
 
         assertFalse(br.output.contains("org.lwjgl"), "LWJGL was not removed from the server classpath")
+    }
+
+    @Test
+    fun `1241 forge gets treated accurately`() {
+        gradleTest.setStonecutterVersion("1.21.4", "forge")
+        val br = gradleTest.run("printClasspathServer1214Forge")
+
+        assertFalse(br.output.contains("org.lwjgl"), "LWJGL was not removed from the server classpath")
+        assertTrue(br.output.contains("Game test server task is disabled for 1.21.4 Forge Architectury"))
     }
 
     @Test

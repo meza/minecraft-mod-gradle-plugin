@@ -37,6 +37,7 @@ dependencies {
     testImplementation("org.junit-pioneer:junit-pioneer:2.+")
     testImplementation("net.bytebuddy:byte-buddy:LATEST")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    testImplementation(kotlin("test"))
 
 }
 
