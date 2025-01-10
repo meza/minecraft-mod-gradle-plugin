@@ -34,6 +34,7 @@ dependencies {
     testImplementation("org.mockito:mockito-core:5.4.0")
     testImplementation("org.mockito.kotlin:mockito-kotlin:5.4.0")
     testImplementation("org.junit.jupiter:junit-jupiter:5.+")
+    testImplementation("org.junit-pioneer:junit-pioneer:2.+")
     testImplementation("net.bytebuddy:byte-buddy:LATEST")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
@@ -42,6 +43,8 @@ dependencies {
 tasks.withType<Test> {
     useJUnitPlatform()
     jvmArgs("-XX:+EnableDynamicAgentLoading")
+    jvmArgs("--add-opens", "java.base/java.util=ALL-UNNAMED")
+    jvmArgs("--add-opens", "java.base/java.lang=ALL-UNNAMED")
 }
 
 java {

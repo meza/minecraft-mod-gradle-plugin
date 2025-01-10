@@ -140,6 +140,12 @@ interface IntegrationTest {
             return this.build()
         }
 
+        fun setModProperty(key: String, value: String): TestBuilder {
+            val properties = gradleProperties.readText().lines().filterNot { it.startsWith(key) }
+            gradleProperties.writeText(properties.joinToString("\n") + "\n$key=$value\n")
+            return this
+        }
+
         private fun getSupportedMinecraftVersions(): String {
             val versions = supportedMinecraftVersions.map { (version, loaders) ->
                 val loadersString = loaders.joinToString(", ") { "\"$it\"" }
