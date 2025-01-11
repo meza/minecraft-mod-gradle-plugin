@@ -1,6 +1,7 @@
 package gg.meza.stonecraft
 
 import org.gradle.api.Project
+import org.gradle.api.file.Directory
 import org.gradle.testfixtures.ProjectBuilder
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
@@ -25,6 +26,7 @@ interface IntegrationTest {
     class TestBuilder(addHeader: Boolean) {
         private val runner = GradleRunner.create()
             .withPluginClasspath()
+            .withArguments("-Dorg.gradle.jvmargs=-Xmx4G")
             .forwardOutput()
             .withDebug(true)
 
@@ -86,7 +88,7 @@ interface IntegrationTest {
                 listOf(
                     "--gradle-user-home", gradleHome.absolutePath,
                     "--stacktrace",
-                    "--warning-mode", "fail"
+                    "--warning-mode", "all"
                 )
             )
         }
@@ -99,7 +101,8 @@ interface IntegrationTest {
 
         fun withProperties(properties: Map<String, String>): TestBuilder {
             properties.forEach { (key, value) ->
-                gradleProperties.appendText("$key=$value\n")
+                val existingProperties = gradleProperties.readText().lines().filterNot { it.startsWith("$key=") }
+                gradleProperties.writeText(existingProperties.joinToString("\n") + "\n$key=$value\n")
             }
             return this
         }

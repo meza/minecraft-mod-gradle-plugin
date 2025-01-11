@@ -13,11 +13,12 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 /*import net.neoforged.fml.ModContainer;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
-*//*?}*/
+*/
+/*?}*/
 
 /*? if forgeLike {*/
 /*@Mod("examplemod")
-public class ServerRedstoneBlock {
+public class ExampleMod {*/
 /*?}*/
 
 /*? if fabric {*/
@@ -25,18 +26,15 @@ public class ExampleMod implements ModInitializer {
 /*? }*/
 
     /*? if forge {*/
-    /*public ExampleMod(final FMLJavaModLoadingContext context) {
-    }*/
+    /*public ExampleMod(final FMLJavaModLoadingContext context) {}*/
     /*?}*/
 
     /*? if neoforge {*/
-    /*public ExampleMod(IEventBus modEventBus, ModContainer modContainer) {
-    }*/
+    /*public ExampleMod(IEventBus modEventBus, ModContainer modContainer) {}*/
     /*?}*/
 
     /*? if fabric {*/
     @Override
-    public void onInitialize() {
-    }
+    public void onInitialize() {}
     /*?}*/
 }

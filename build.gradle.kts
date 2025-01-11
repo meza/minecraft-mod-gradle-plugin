@@ -46,6 +46,7 @@ tasks.withType<Test> {
     jvmArgs("-XX:+EnableDynamicAgentLoading")
     jvmArgs("--add-opens", "java.base/java.util=ALL-UNNAMED")
     jvmArgs("--add-opens", "java.base/java.lang=ALL-UNNAMED")
+    jvmArgs("-Xmx4G")
 }
 
 java {
